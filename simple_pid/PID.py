@@ -111,7 +111,10 @@ class PID(object):
 
         now = self.time()
         if dt is None:
-            dt = utime.ticks_diff(now,self._last_time) if (utime.ticks_diff(now,self._last_time)) else 1e-16
+            if self.scale == 'time':
+                dt = (now - self._last_time) if (now - self._last_time) else 1e-16
+            else:    
+                dt = utime.ticks_diff(now,self._last_time) if (utime.ticks_diff(now,self._last_time)) else 1e-16
         elif dt <= 0:
             raise ValueError('dt has negative value {}, must be positive'.format(dt))
 
